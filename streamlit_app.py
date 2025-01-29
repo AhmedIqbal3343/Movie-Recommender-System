@@ -3,17 +3,14 @@ import streamlit as st
 import pickle
 import requests
 
-
 # Load Data
-@st.cache_data
+@st.cache_data  
 def load_data():
     movies_list = pickle.load(open("movies.pkl", "rb"))
     similarity = pickle.load(open("similarity.pkl", "rb"))
     return pd.DataFrame(movies_list), similarity
 
-
 movies, similarity = load_data()
-
 
 # Fetch movie poster
 def fetch_poster(movie_id):
@@ -22,7 +19,6 @@ def fetch_poster(movie_id):
     )
     data = response.json()
     return "http://image.tmdb.org/t/p/w500/" + data.get("poster_path", "")
-
 
 # Recommendation function
 def recommended(movie):
@@ -37,7 +33,6 @@ def recommended(movie):
         recommended_movies.append(movies.iloc[j[0]].title)
         recommended_movies_poster.append(fetch_poster(movies_id))
     return recommended_movies, recommended_movies_poster
-
 
 # UI Styling
 st.markdown(
@@ -56,14 +51,14 @@ st.markdown(
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
-
+        
         /* Movie selection text */
         .stSelectbox label {
             color: white !important; 
             font-weight: bold;
             font-size: 20px;
         }
-
+        
         /* Button styling */
         .stButton>button {
             color: white !important;
@@ -82,11 +77,6 @@ st.markdown(
 
         /* Main title styling */
         .stTitle {
-            color: white !important;
-        }
-
-        /* Specific styling for the title */
-        h1 {
             color: white !important;
         }
     </style>
