@@ -3,14 +3,17 @@ import streamlit as st
 import pickle
 import requests
 
+
 # Load Data
-@st.cache_data  
+@st.cache_data
 def load_data():
     movies_list = pickle.load(open("movies.pkl", "rb"))
     similarity = pickle.load(open("similarity.pkl", "rb"))
     return pd.DataFrame(movies_list), similarity
 
+
 movies, similarity = load_data()
+
 
 # Fetch movie poster
 def fetch_poster(movie_id):
@@ -19,6 +22,7 @@ def fetch_poster(movie_id):
     )
     data = response.json()
     return "http://image.tmdb.org/t/p/w500/" + data.get("poster_path", "")
+
 
 # Recommendation function
 def recommended(movie):
@@ -33,6 +37,7 @@ def recommended(movie):
         recommended_movies.append(movies.iloc[j[0]].title)
         recommended_movies_poster.append(fetch_poster(movies_id))
     return recommended_movies, recommended_movies_poster
+
 
 # UI Styling
 st.markdown(
@@ -51,14 +56,14 @@ st.markdown(
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
-        
+
         /* Movie selection text */
         .stSelectbox label {
             color: white !important; 
             font-weight: bold;
             font-size: 20px;
         }
-        
+
         /* Button styling */
         .stButton>button {
             color: white !important;
@@ -75,8 +80,8 @@ st.markdown(
             transform: scale(1.05);
         }
 
-        /* Main title styling */
-        .stTitle {
+        /* Title styling to white */
+        .title {
             color: white !important;
         }
     </style>
@@ -84,7 +89,8 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-st.title("Movie Recommender System")
+# Title with custom HTML
+st.markdown("<h1 class='title'>Movie Recommender System</h1>", unsafe_allow_html=True)
 
 if "selected_movie" not in st.session_state:
     st.session_state.selected_movie = None
