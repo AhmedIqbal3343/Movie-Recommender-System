@@ -1,21 +1,13 @@
-# streamlit_app.py  
-# -----------------------------------------
-# This script is the Streamlit web interface for the Movie Recommender System.
-# It provides an interactive platform for users to input a movie title and receive 
-# recommendations directly on their browser.  
-#
-# To run this application, execute the following command in the terminal:
-#  
-#     streamlit run streamlit_app.py  
-#
-# Once executed, Streamlit will launch the app in your default web browser.
-# -----------------------------------------
-
 import pandas as pd
 import streamlit as st
 import pickle
 import requests
+import gdown
 
+# Function to download pickle file from Google Drive
+def download_pickle_file():
+    url = 'https://drive.google.com/uc?export=download&id=1ryKP6k1EYdBUTKMThTDChFt_GRRsSj_B'
+    gdown.download(url, 'similarity.pkl', quiet=False)
 
 def fetch_poster(movie_id):
     response = requests.get(f"https://api.themoviedb.org/3/movie/{movie_id}?api_key=51e2c996dd88acc487acecc949148fb0&language=en-US")
@@ -35,17 +27,20 @@ def recommended(movie):
         recommended_movies_poster.append(fetch_poster(movies_id))
     return recommended_movies, recommended_movies_poster
 
+# Download the similarity pickle file
+download_pickle_file()
 
-
+# Load the data
 movies_list = pickle.load(open("movies.pkl", "rb"))
-
 movies = pd.DataFrame(movies_list)
 
-similarity = pickle.load(open("similarity.pkl","rb"))
+# Load the similarity model
+similarity = pickle.load(open("similarity.pkl", "rb"))
 
+# Streamlit UI
 st.title("Movie Recommender System")
 
-selected_movie= st.selectbox(
+selected_movie = st.selectbox(
     "Select your Favourite Movie here:",
     movies["title"].values,
     index=None,
@@ -74,8 +69,3 @@ if st.button("Recommended"):
     with col5:
         st.text(names[4])
         st.image(poster[4])
-
-
-
-
-
