@@ -4,7 +4,7 @@ import pickle
 import requests
 import gdown
 
-# Custom CSS for Styling from Code 2
+# Custom CSS for Styling
 def local_css():
     st.markdown(
         """
@@ -63,14 +63,23 @@ def download_pickle_file():
     url = 'https://drive.google.com/uc?export=download&id=1ryKP6k1EYdBUTKMThTDChFt_GRRsSj_B'
     gdown.download(url, 'similarity.pkl', quiet=False)
 
-# Function to fetch movie poster
+# Load Data with caching
+@st.cache_data
+def load_data():
+    movies_list = pickle.load(open("movies.pkl", "rb"))
+    movies = pd.DataFrame(movies_list)
+    similarity = pickle.load(open("similarity.pkl", "rb"))
+    return movies, similarity
+
+# Fetch movie poster
 def fetch_poster(movie_id):
     response = requests.get(f"https://api.themoviedb.org/3/movie/{movie_id}?api_key=51e2c996dd88acc487acecc949148fb0&language=en-US")
     data = response.json()
     return "http://image.tmdb.org/t/p/w500/" + data.get("poster_path", "")
 
-# Function to get recommended movies
-def recommended(movie):
+# Recommendation function with caching
+@st.cache_data
+def recommended(movie, movies, similarity):
     movie_index = movies[movies["title"] == movie].index[0]
     distance = similarity[movie_index]
     final_movies = sorted(list(enumerate(distance)), reverse=True, key=lambda x: x[1])[1:6]
@@ -87,11 +96,7 @@ def recommended(movie):
 download_pickle_file()
 
 # Load the data
-movies_list = pickle.load(open("movies.pkl", "rb"))
-movies = pd.DataFrame(movies_list)
-
-# Load the similarity model
-similarity = pickle.load(open("similarity.pkl", "rb"))
+movies, similarity = load_data()
 
 # Streamlit UI
 st.markdown("<h1>🎬 Movie Recommender System</h1>", unsafe_allow_html=True)
@@ -100,25 +105,26 @@ st.markdown('<p style="color:white; font-size:18px; font-weight:bold;">📌 Sele
 selected_movie = st.selectbox("", movies["title"].values, index=None)
 
 if st.button("🎥 Get Recommendations"):
-    names, poster = recommended(selected_movie)
-    col1, col2, col3, col4, col5 = st.columns(5)
+    if selected_movie:
+        names, poster = recommended(selected_movie, movies, similarity)
+        col1, col2, col3, col4, col5 = st.columns(5)
 
-    with col1:
-        st.markdown(f"<p class='movie-title'>{names[0]}</p>", unsafe_allow_html=True)
-        st.image(poster[0])
+        with col1:
+            st.markdown(f"<p class='movie-title'>{names[0]}</p>", unsafe_allow_html=True)
+            st.image(poster[0])
 
-    with col2:
-        st.markdown(f"<p class='movie-title'>{names[1]}</p>", unsafe_allow_html=True)
-        st.image(poster[1])
+        with col2:
+            st.markdown(f"<p class='movie-title'>{names[1]}</p>", unsafe_allow_html=True)
+            st.image(poster[1])
 
-    with col3:
-        st.markdown(f"<p class='movie-title'>{names[2]}</p>", unsafe_allow_html=True)
-        st.image(poster[2])
+        with col3:
+            st.markdown(f"<p class='movie-title'>{names[2]}</p>", unsafe_allow_html=True)
+            st.image(poster[2])
 
-    with col4:
-        st.markdown(f"<p class='movie-title'>{names[3]}</p>", unsafe_allow_html=True)
-        st.image(poster[3])
+        with col4:
+            st.markdown(f"<p class='movie-title'>{names[3]}</p>", unsafe_allow_html=True)
+            st.image(poster[3])
 
-    with col5:
-        st.markdown(f"<p class='movie-title'>{names[4]}</p>", unsafe_allow_html=True)
-        st.image(poster[4])
+        with col5:
+            st.markdown(f"<p class='movie-title'>{names[4]}</p>", unsafe_allow_html=True)
+            st.image(poster[4])
