@@ -7,7 +7,7 @@
 #
 # To run this application, execute the following command in the terminal:
 #  
-#     streamlit run main.py  
+#     streamlit run streamlit_app.py  
 #
 # Once executed, Streamlit will launch the app in your default web browser.
 # -----------------------------------------
