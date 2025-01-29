@@ -1,3 +1,18 @@
+```python
+# main.py  
+# -----------------------------------------
+# This script is the Streamlit web interface for the Movie Recommender System.
+# It provides an interactive platform for users to input a movie title and receive 
+# recommendations directly on their browser.  
+#
+# To run this application, execute the following command in the terminal:
+#  
+#     streamlit run main.py  
+#
+# Once executed, Streamlit will launch the app in your default web browser.
+# -----------------------------------------
+```
+
 import pandas as pd
 import streamlit as st
 import pickle
