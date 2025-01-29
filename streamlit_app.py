@@ -103,22 +103,23 @@ if st.button("🎥 Get Recommendations"):
     names, poster = recommended(selected_movie)
     col1, col2, col3, col4, col5 = st.columns(5)
 
+    # Setting a fixed height for the image and aligning text at the top
     with col1:
         st.markdown(f"<p class='movie-title'>{names[0]}</p>", unsafe_allow_html=True)
-        st.image(poster[0])
+        st.image(poster[0], use_column_width=True, caption="")
 
     with col2:
         st.markdown(f"<p class='movie-title'>{names[1]}</p>", unsafe_allow_html=True)
-        st.image(poster[1])
+        st.image(poster[1], use_column_width=True, caption="")
 
     with col3:
         st.markdown(f"<p class='movie-title'>{names[2]}</p>", unsafe_allow_html=True)
-        st.image(poster[2])
+        st.image(poster[2], use_column_width=True, caption="")
 
     with col4:
         st.markdown(f"<p class='movie-title'>{names[3]}</p>", unsafe_allow_html=True)
-        st.image(poster[3])
+        st.image(poster[3], use_column_width=True, caption="")
 
     with col5:
         st.markdown(f"<p class='movie-title'>{names[4]}</p>", unsafe_allow_html=True)
-        st.image(poster[4])
+        st.image(poster[4], use_column_width=True, caption="")
