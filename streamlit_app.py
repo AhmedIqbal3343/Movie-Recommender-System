@@ -80,8 +80,13 @@ st.markdown(
             transform: scale(1.05);
         }
 
-        /* Title styling to white */
-        .title {
+        /* Main title styling */
+        .stTitle {
+            color: white !important;
+        }
+
+        /* Specific styling for the title */
+        h1 {
             color: white !important;
         }
     </style>
@@ -89,8 +94,7 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# Title with custom HTML
-st.markdown("<h1 class='title'>Movie Recommender System</h1>", unsafe_allow_html=True)
+st.title("Movie Recommender System")
 
 if "selected_movie" not in st.session_state:
     st.session_state.selected_movie = None
