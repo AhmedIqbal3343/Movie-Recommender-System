@@ -1,0 +1,6 @@
+pandas
+numpy
+streamlit
+requests
+gdown
+scikit-learn
