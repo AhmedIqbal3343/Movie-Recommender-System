@@ -142,7 +142,6 @@ python-json-logger==2.0.7
 pyttsx3==2.97
 pytz==2024.1
 PyWavelets==1.7.0
-pywin32==306
 pywinpty==2.0.13
 PyYAML==6.0.1
 pyzmq==25.1.2
