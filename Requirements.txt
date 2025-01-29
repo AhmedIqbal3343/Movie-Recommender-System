@@ -1,8 +1,0 @@
-numpy
-pandas
-sklearn
-nltk
-streamlit
-requests
-gdown
-pickle5
