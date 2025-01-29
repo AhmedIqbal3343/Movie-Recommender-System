@@ -4,38 +4,51 @@ import pickle
 import requests
 import gdown
 
-# Custom CSS for Styling
+# Custom CSS for Styling from Code 2
 def local_css():
     st.markdown(
         """
         <style>
+            /* Background with gradient */
             .stApp {
-                background: linear-gradient(135deg, #1f1c2c, #928DAB);
-                color: white;
-                padding: 20px;
+                background: linear-gradient(135deg, #1F1C2C, #3A1C71, #D76D77, #FFAF7B);
+                background-size: 400% 400%;
+                animation: gradientBG 15s ease infinite;
+                color: white !important;
             }
-            h1 {
-                text-align: center;
-                font-size: 40px;
+
+            @keyframes gradientBG {
+                0% { background-position: 0% 50%; }
+                50% { background-position: 100% 50%; }
+                100% { background-position: 0% 50%; }
+            }
+
+            /* Movie selection text */
+            .stSelectbox label {
+                color: white !important; 
                 font-weight: bold;
-                color: #FF9800;
+                font-size: 20px;
             }
+
+            /* Button styling */
             .stButton>button {
-                background-color: #FF9800 !important;
                 color: white !important;
-                font-size: 18px !important;
-                border-radius: 10px !important;
-                width: 100%;
-            }
-            .movie-title {
-                font-size: 16px;
-                font-weight: bold;
-                text-align: center;
-            }
-            label {
-                color: white !important;
+                background: linear-gradient(45deg, #FF512F, #DD2476);
+                border-radius: 10px;
+                padding: 12px;
                 font-size: 18px;
                 font-weight: bold;
+                border: none;
+                transition: 0.3s;
+            }
+            .stButton>button:hover {
+                background: linear-gradient(45deg, #DD2476, #FF512F);
+                transform: scale(1.05);
+            }
+
+            /* Main title styling */
+            .stTitle {
+                color: white !important;
             }
         </style>
         """,
