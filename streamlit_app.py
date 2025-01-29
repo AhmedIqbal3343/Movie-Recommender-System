@@ -1,5 +1,4 @@
-```python
-# main.py  
+# streamlit_app.py  
 # -----------------------------------------
 # This script is the Streamlit web interface for the Movie Recommender System.
 # It provides an interactive platform for users to input a movie title and receive 
@@ -11,7 +10,6 @@
 #
 # Once executed, Streamlit will launch the app in your default web browser.
 # -----------------------------------------
-```
 
 import pandas as pd
 import streamlit as st
