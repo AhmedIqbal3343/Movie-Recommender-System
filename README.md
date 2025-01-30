@@ -3,7 +3,7 @@
 ## 📌 Overview
 Discover movies like never before! 🎬✨ The Movie Recommender System is an intelligent machine learning project developed in Python and deployed using Streamlit. It uses content-based filtering to analyze movie metadata and recommend five similar movies based on the selected title. Whether you love classics or the latest hits, this system ensures you always find the perfect movie! 🍿🚀
       
-🌐 You can explore the live project [here](https://movie-recommender-system-nh69oqdurztwzovrlwv7ep.streamlit.app/).  
+🌐 You can explore the live project [here](https://movie-recommender-system2.streamlit.app/).  
 
 
 ## Continuous Improvement:
@@ -62,7 +62,7 @@ streamlit run streamlit_app.py
 ---
 
 ## 🏗️🏗 *Deployment on Streamlit Cloud*  
-This project is deployed on Streamlit Cloud, making it accessible online without installation. You can check out the live project [here](https://movie-recommender-system-nh69oqdurztwzovrlwv7ep.streamlit.app/).  
+This project is deployed on Streamlit Cloud, making it accessible online without installation. You can check out the live project [here](https://movie-recommender-system2.streamlit.app/).  
 
 
 ---
