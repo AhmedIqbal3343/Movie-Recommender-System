@@ -96,6 +96,13 @@ st.markdown(
         .stTitle {
             color: white !important;
         }
+        /* Movie name styling */
+        .movie-name {
+            color: white !important;
+            font-weight: bold;
+            text-align: center;
+            font-size: 16px;
+        }
     </style>
     """,
     unsafe_allow_html=True
