@@ -5,17 +5,11 @@ import requests
 import gdown
 
 
-# Function to download pickle file from Google Drive (only if not available)
-@st.cache_data
-def download_pickle_file():
-    url = 'https://drive.google.com/uc?export=download&id=1ryKP6k1EYdBUTKMThTDChFt_GRRsSj_B'
-    gdown.download(url, 'similarity.pkl', quiet=False)
-
-
 # Function to fetch movie poster
 def fetch_poster(movie_id):
     response = requests.get(
-        f"https://api.themoviedb.org/3/movie/{movie_id}?api_key=51e2c996dd88acc487acecc949148fb0&language=en-US")
+        f"https://api.themoviedb.org/3/movie/{movie_id}?api_key=51e2c996dd88acc487acecc949148fb0&language=en-US"
+    )
     data = response.json()
     return "http://image.tmdb.org/t/p/w500/" + data.get("poster_path", "")
 
@@ -38,41 +32,78 @@ def recommended(movie):
 
 # Caching movie data
 @st.cache_data
-def load_movies():
-    return pickle.load(open("movies.pkl", "rb"))
+def load_data():
+    movies_list = pickle.load(open("movies.pkl", "rb"))
+    similarity = pickle.load(open("similarity.pkl", "rb"))
+    return pd.DataFrame(movies_list), similarity
 
 
-@st.cache_data
-def load_similarity():
-    return pickle.load(open("similarity.pkl", "rb"))
+movies, similarity = load_data()
 
+# UI Styling
+st.markdown(
+    """
+    <style>
+        /* Background with gradient */
+        .stApp {
+            background: linear-gradient(135deg, #1F1C2C, #3A1C71, #D76D77, #FFAF7B);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: white !important;
+        }
 
-# Download similarity file if not present
-download_pickle_file()
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
 
-# Load movies and similarity matrix once
-if "movies" not in st.session_state:
-    st.session_state.movies = pd.DataFrame(load_movies())
+        /* Movie selection text */
+        .stSelectbox label {
+            color: white !important; 
+            font-weight: bold;
+            font-size: 20px;
+        }
 
-if "similarity" not in st.session_state:
-    st.session_state.similarity = load_similarity()
+        /* Button styling */
+        .stButton>button {
+            color: white !important;
+            background: linear-gradient(45deg, #FF512F, #DD2476);
+            border-radius: 10px;
+            padding: 12px;
+            font-size: 18px;
+            font-weight: bold;
+            border: none;
+            transition: 0.3s;
+        }
+        .stButton>button:hover {
+            background: linear-gradient(45deg, #DD2476, #FF512F);
+            transform: scale(1.05);
+        }
 
-movies = st.session_state.movies
-similarity = st.session_state.similarity
-
-# Streamlit UI
-st.title("Movie Recommender System")
-
-selected_movie = st.selectbox(
-    "Select your Favourite Movie here:",
-    movies["title"].values
+        /* Main title styling */
+        .stTitle {
+            color: white !important;
+        }
+    </style>
+    """,
+    unsafe_allow_html=True
 )
 
-if st.button("Recommend"):
-    names, posters = recommended(selected_movie)
-    cols = st.columns(5)
+st.title("🎬 Movie Recommender System")
 
-    for col, name, poster in zip(cols, names, posters):
-        with col:
-            st.text(name)
-            st.image(poster)
+selected_movie = st.selectbox(
+    "📌 Select Your Favorite Movie:",
+    movies["title"].values,
+    index=None
+)
+
+if st.button("🎥 Get Recommendations"):
+    if selected_movie:
+        names, posters = recommended(selected_movie)
+        cols = st.columns(5)
+
+        for col, name, poster in zip(cols, names, posters):
+            with col:
+                st.text(name)
+                st.image(poster)
