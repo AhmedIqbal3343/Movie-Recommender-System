@@ -1,9 +1,14 @@
 # 🎬 Movie Recommender System  
 
-## 📌 Overview  
-Discover movies like never before! 🎬✨ The **Movie Recommender System** is an intelligent **machine learning project** developed in **Python** and deployed using **Streamlit**. It uses **content-based filtering** to analyze movie metadata and recommend five similar movies based on the selected title. Whether you love **classics** or the **latest hits**, this system ensures you always find the perfect movie! 🍿🚀  
+## 📌 Overview
+Discover movies like never before! 🎬✨ The Movie Recommender System is an intelligent machine learning project developed in Python and deployed using Streamlit. It uses content-based filtering to analyze movie metadata and recommend five similar movies based on the selected title. Whether you love classics or the latest hits, this system ensures you always find the perfect movie! 🍿🚀
+      
+🌐 You can explore the live project [here](https://movie-recommender-system-nh69oqdurztwzovrlwv7ep.streamlit.app/).  
 
----
+
+## Continuous Improvement:
+This project has gone through over **40** iterations to refine and optimize its features. The goal is to continually improve the system’s performance, user experience, and overall efficiency. As I'm deeply connected to this project, I plan on making further enhancements to ensure it remains user-friendly and highly functional for everyone. Expect more updates as we aim for even better recommendations! 🚀💡
+
 
 ## 🚀 Features  
 ✔️ **Content-Based Filtering** – Recommends movies based on their metadata (genres, cast, crew, etc.).  
@@ -56,8 +61,9 @@ streamlit run streamlit_app.py
 
 ---
 
-## 🏗️ Deployment on Streamlit Cloud  
-This project is **deployed on Streamlit Cloud**, making it accessible online without installation. If running locally, ensure you have **internet access** to download the model and fetch posters.  
+## 🏗️🏗 *Deployment on Streamlit Cloud*  
+This project is deployed on Streamlit Cloud, making it accessible online without installation. You can check out the live project [here](https://movie-recommender-system-nh69oqdurztwzovrlwv7ep.streamlit.app/).  
+
 
 ---
 
