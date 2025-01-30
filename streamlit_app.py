@@ -16,18 +16,21 @@ def fetch_poster(movie_id):
 
 # Function to get movie recommendations
 def recommended(movie, movies, similarity):
-    movie_index = movies[movies["title"] == movie].index[0]
-    distance = similarity[movie_index]
-    final_movies = sorted(list(enumerate(distance)), reverse=True, key=lambda x: x[1])[1:6]
+    try:
+        movie_index = movies[movies["title"] == movie].index[0]
+        distance = similarity[movie_index]
+        final_movies = sorted(list(enumerate(distance)), reverse=True, key=lambda x: x[1])[1:6]
 
-    recommended_movies = []
-    recommended_movies_poster = []
-    for j in final_movies:
-        movie_id = movies.iloc[j[0]].movie_id
-        recommended_movies.append(movies.iloc[j[0]].title)
-        recommended_movies_poster.append(fetch_poster(movie_id))
+        recommended_movies = []
+        recommended_movies_poster = []
+        for j in final_movies:
+            movie_id = movies.iloc[j[0]].movie_id
+            recommended_movies.append(movies.iloc[j[0]].title)
+            recommended_movies_poster.append(fetch_poster(movie_id))
 
-    return recommended_movies, recommended_movies_poster
+        return recommended_movies, recommended_movies_poster
+    except IndexError:
+        return [], []
 
 
 # Function to download the similarity.pkl file if it's not already present
@@ -96,6 +99,7 @@ st.markdown(
         .stTitle {
             color: white !important;
         }
+
         /* Movie name styling */
         .movie-name {
             color: white !important;
@@ -119,9 +123,11 @@ selected_movie = st.selectbox(
 if st.button("🎥 Get Recommendations"):
     if selected_movie:
         names, posters = recommended(selected_movie, movies, similarity)
-        cols = st.columns(5)
-
-        for col, name, poster in zip(cols, names, posters):
-            with col:
-                st.text(name)
-                st.image(poster)
+        if names:
+            cols = st.columns(5)
+            for col, name, poster in zip(cols, names, posters):
+                with col:
+                    st.markdown(f"<p class='movie-name'>{name}</p>", unsafe_allow_html=True)
+                    st.image(poster)
+        else:
+            st.warning("No recommendations found. Please select another movie.")
