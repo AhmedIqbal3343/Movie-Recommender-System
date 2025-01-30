@@ -26,7 +26,7 @@ def recommended(movie):
         movie_id = movies.iloc[j[0]].movie_id
         recommended_movies.append(movies.iloc[j[0]].title)
         recommended_movies_poster.append(fetch_poster(movie_id))
-
+    
     return recommended_movies, recommended_movies_poster
 
 
@@ -39,6 +39,7 @@ def load_data():
 
 
 movies, similarity = load_data()
+
 
 # UI Styling
 st.markdown(
@@ -102,7 +103,7 @@ if st.button("🎥 Get Recommendations"):
     if selected_movie:
         names, posters = recommended(selected_movie)
         cols = st.columns(5)
-
+        
         for col, name, poster in zip(cols, names, posters):
             with col:
                 st.text(name)
