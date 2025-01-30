@@ -1,84 +1,78 @@
-# streamlit_app.py  
-# -----------------------------------------
-# This script is the Streamlit web interface for the Movie Recommender System.
-# It provides an interactive platform for users to input a movie title and receive 
-# recommendations directly on their browser.  
-#
-# To run this application, execute the following command in the terminal:
-#  
-#     streamlit run streamlit_app.py  
-#
-# Once executed, Streamlit will launch the app in your default web browser.
-# -----------------------------------------
-
 import pandas as pd
 import streamlit as st
 import pickle
 import requests
 import gdown
 
-# Function to download pickle file from Google Drive
+
+# Function to download pickle file from Google Drive (only if not available)
+@st.cache_data
 def download_pickle_file():
-    url = 'https://drive.google.com/uc?export=download&id=1ryKP6k1EYdBUTKMThTDChFt_GRRsSj_B'  # Use the direct link to your file
+    url = 'https://drive.google.com/uc?export=download&id=1ryKP6k1EYdBUTKMThTDChFt_GRRsSj_B'
     gdown.download(url, 'similarity.pkl', quiet=False)
 
+
+# Function to fetch movie poster
 def fetch_poster(movie_id):
-    response = requests.get(f"https://api.themoviedb.org/3/movie/{movie_id}?api_key=51e2c996dd88acc487acecc949148fb0&language=en-US")
+    response = requests.get(
+        f"https://api.themoviedb.org/3/movie/{movie_id}?api_key=51e2c996dd88acc487acecc949148fb0&language=en-US")
     data = response.json()
-    return  "http://image.tmdb.org/t/p/w500/" + data["poster_path"]
+    return "http://image.tmdb.org/t/p/w500/" + data.get("poster_path", "")
 
+
+# Function to get movie recommendations
 def recommended(movie):
-    movie_index = movies[movies["title"] == movie ].index[0]
+    movie_index = movies[movies["title"] == movie].index[0]
     distance = similarity[movie_index]
-    final_movies = sorted(list(enumerate(distance)), reverse=True, key=lambda x:x[1])[1:6]
+    final_movies = sorted(list(enumerate(distance)), reverse=True, key=lambda x: x[1])[1:6]
 
-    recommended_movies=[]
-    recommended_movies_poster=[]
+    recommended_movies = []
+    recommended_movies_poster = []
     for j in final_movies:
-        movies_id = movies.iloc[j[0]].movie_id
+        movie_id = movies.iloc[j[0]].movie_id
         recommended_movies.append(movies.iloc[j[0]].title)
-        recommended_movies_poster.append(fetch_poster(movies_id))
+        recommended_movies_poster.append(fetch_poster(movie_id))
+
     return recommended_movies, recommended_movies_poster
 
-# Download the similarity pickle file
+
+# Caching movie data
+@st.cache_data
+def load_movies():
+    return pickle.load(open("movies.pkl", "rb"))
+
+
+@st.cache_data
+def load_similarity():
+    return pickle.load(open("similarity.pkl", "rb"))
+
+
+# Download similarity file if not present
 download_pickle_file()
 
-# Load the data
-movies_list = pickle.load(open("movies.pkl", "rb"))
-movies = pd.DataFrame(movies_list)
+# Load movies and similarity matrix once
+if "movies" not in st.session_state:
+    st.session_state.movies = pd.DataFrame(load_movies())
 
-# Load the similarity model
-similarity = pickle.load(open("similarity.pkl", "rb"))
+if "similarity" not in st.session_state:
+    st.session_state.similarity = load_similarity()
+
+movies = st.session_state.movies
+similarity = st.session_state.similarity
 
 # Streamlit UI
 st.title("Movie Recommender System")
 
 selected_movie = st.selectbox(
     "Select your Favourite Movie here:",
-    movies["title"].values,
-    index=None,
+    movies["title"].values
 )
 
-if st.button("Recommended"):
-    names, poster = recommended(selected_movie)
-    col1, col2, col3, col4, col5 = st.columns(5)
+if st.button("Recommend"):
+    names, posters = recommended(selected_movie)
+    cols = st.columns(5)
 
-    with col1:
-        st.text(names[0])
-        st.image(poster[0])
-
-    with col2:
-        st.text(names[1])
-        st.image(poster[1])
-
-    with col3:
-        st.text(names[2])
-        st.image(poster[2])
-
-    with col4:
-        st.text(names[3])
-        st.image(poster[3])
-
-    with col5:
-        st.text(names[4])
-        st.image(poster[4])
+    for col, name, poster in zip(cols, names, posters):
+        with col:
+            st.text(name)
+            st.image(poster)
